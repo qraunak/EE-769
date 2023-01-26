@@ -30,17 +30,21 @@ def estimate_weight(matrix, target_y , lambda_l2):
     add_matrix_inverse = np.linalg.inv(add_matrix)
     matrix_multiplication_target_y = np.dot(transpose_matrix, target_y)
     weight = np.dot(add_matrix_inverse , matrix_multiplication_target_y)
-    pridicted_y = np.dot(transpose_matrix, weight)
+    pridicted_y = np.dot(matrix, weight)
     MSE= mean_square_error(pridicted_y, target_y)
     return weight, MSE, pridicted_y
 
 def compute_l2_norm(weight_vector):
     return np.linalg.norm(weight_vector, ord=2)
-    pass
 
-
-def  compute_gradient_of_L2_norm(matrix, vector):
-    pass
+def  compute_gradient_of_L2_norm(matrix, t_vector, w_vector):
+    gradient_list=[]
+    N=matrix.shape[0]
+    w_vector = w_vector.transpose()[0]
+    for i in range(N):
+        gc = (-2*matrix[i]*(t_vector[i] - np.dot(w_vector, matrix[i])))/N
+        gradient_list.append(gc)
+    return np.array(gradient_list)
 
 if __name__ == "__main__":
     ROW = 3
@@ -55,4 +59,7 @@ if __name__ == "__main__":
     mse=mean_square_error(estimate_y, target_y)
     l2_norm=compute_l2_norm(weight_vector)
     weight, MSE, pridicted_y =estimate_weight(matrix,target_y,l2_norm)
+    gradient_weight = compute_gradient_of_L2_norm(matrix, target_y, weight)
+    pass
+
 
